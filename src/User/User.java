@@ -1,6 +1,6 @@
 package User;
 
-import Connection.Connection;
+import UsersConnection.UsersConnection;
 
 import java.net.Socket;
 
@@ -8,9 +8,9 @@ public class User {
 
     private String nome;
     private Socket socket;
-    private Connection connesione;
+    private UsersConnection connesione;
 
-    public User(String nome, Socket socket, Connection connesione) {
+    public User(String nome, Socket socket, UsersConnection connesione) {
         this.nome = nome;
         this.socket = socket;
         this.connesione = connesione;
@@ -24,7 +24,7 @@ public class User {
         return socket;
     }
 
-    public Connection getConnesione() {
+    public UsersConnection getConnesione() {
         return connesione;
     }
 }

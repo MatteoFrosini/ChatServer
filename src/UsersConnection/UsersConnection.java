@@ -1,4 +1,4 @@
-package Connection;
+package UsersConnection;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,12 +20,12 @@ import java.net.Socket;
  * </li>
  * </ul>
  */
-public class Connection {
+public class UsersConnection {
     private Socket s;
     private BufferedReader in;
     private DataOutputStream out;
 
-    public Connection(Socket s) {
+    public UsersConnection(Socket s) {
         this.s = s;
         try {
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));

@@ -38,7 +38,7 @@ public class LogManager {
     /**
      * Oggetto {@link DateTimeFormatter} necessario per formattare la data.
      */
-    public DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
+    public DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     /**
      * Costruttore della classe {@link LogManager}
      * */
@@ -94,7 +94,9 @@ public class LogManager {
      * //<a href="https://docs.oracle.com/en/java/">note275</a> <br><b>*</b> : Per colpa delle limitazioni su i nomi dei file di Windows non posso usare i {@code ":"} per rappresentare in modo più bellino la data.
      */
     public void buildLog(){
-        File log = new File(".\\serverLogs\\ServerLog-" + printTime() + ".txt");
+        DateTimeFormatter formatNomeLog = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
+        time = LocalDateTime.now();
+        File log = new File(".\\serverLogs\\ServerLog-" + "[" + time.format(formatNomeLog) + "]" + ".txt");
         try {
             this.writer = new FileWriter(log, true);
         } catch (IOException e) {

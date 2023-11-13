@@ -1,4 +1,4 @@
-import Connection.Connection;
+import UsersConnection.UsersConnection;
 import Managers.LogManager;
 import User.User;
 
@@ -14,12 +14,11 @@ public class ServerThread extends Thread{
     }
     @Override
     public void run(){
-        Connection connessione = new Connection(s);
+        UsersConnection connessione = new UsersConnection(s);
+        logManager.logPrint(this.getName() + " in attesa di nome da Client " + s.getRemoteSocketAddress().toString());
         String nome = connessione.getLine();
         user = new User(nome, s, connessione);
         logManager.logPrint("Creato User " + user.getNome());
         logManager.logPrint("Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
     }
-
-
 }
