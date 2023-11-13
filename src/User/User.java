@@ -1,7 +1,5 @@
 package User;
-
 import UsersConnection.UsersConnection;
-
 import java.net.Socket;
 
 public class User {

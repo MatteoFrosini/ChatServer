@@ -55,7 +55,7 @@ public class LogManager {
             System.out.println("Cartella serverLogs già esistente o non creata");
         }
         buildLog();
-        this.logPrint("Creato Log");
+        this.logPrint("Creato file di log");
     }
     /**
      * Questo metodo stampa la striga inserita preceduta dal tempo attuale all'esecuzione.<br>
