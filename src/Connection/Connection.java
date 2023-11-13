@@ -5,7 +5,21 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-
+/**
+ * Questa classe serve alla classe {@link User} per interfacciarsi nella comunicazione client-server. <br>
+ * Questa classe è dotata di 3 attributi
+ * <ul>
+ * <li>
+ *     {@link #s} - La {@link Socket}
+ * </li>
+ * <li>
+ *     {@link #in} - Il {@link BufferedReader}
+ * </li>
+ * <li>
+ *     {@link #out} - La {@link DataOutputStream}
+ * </li>
+ * </ul>
+ */
 public class Connection {
     private Socket s;
     private BufferedReader in;

@@ -11,6 +11,18 @@ import java.time.format.DateTimeFormatter;
  * Usando il metodo {@link #logPrint(String)} siamo capaci di scrivere sul file di log.<br>
  * Tutti i log verranno salvati in una cartella nominata {@code "serverLogs"}.<br>
  * Tutti i log utilizzano il format di denominazione descritto nel metodo {@link #buildLog()}.<br>
+ * Questa classe è dotata di 3 attributi.
+ * <ul>
+ * <li>
+ *     {@link #time} - {@link LocalDateTime}
+ * </li>
+ * <li>
+ *     {@link #writer} - Il {@link FileWriter}
+ * </li>
+ * <li>
+ *     {@link #format} - Il {@link DateTimeFormatter}
+ * </li>
+ * </ul>
  * @author Matteo Frosini (<a href="https://docs.oracle.com/en/java/">matte275.ddns.net</a>)
  */
 public class LogManager {
