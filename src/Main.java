@@ -1,10 +1,10 @@
-import Logger.Logger;
+import Managers.LogManager;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) {
-        Logger logger = new Logger();
+        LogManager logger = new LogManager();
         logger.initLogsFolder();
         try {
             ServerSocket server = new ServerSocket(2750);
