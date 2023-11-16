@@ -6,17 +6,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class Main {
     public static void main(String[] args) {
+        //Inizializzazione dei Manager del server
         LogManager logger = LogManager.getInstance();
-        ResourceManager resourceManager = new ResourceManager(logger);
+        ResourceManager resourceManager = ResourceManager.getInstance();
         ServerStructureManager ssm = ServerStructureManager.getInstance();
         ssm.checkServerDataStructure(new ArrayList<>(Arrays.asList("data","serverLogs",".\\data\\loginInfo",".\\data\\chatData")));
-        // logger singleton
-        // ssm
+        resourceManager.initData();
         try {
             ServerSocket server = new ServerSocket(2750);
             while(true){

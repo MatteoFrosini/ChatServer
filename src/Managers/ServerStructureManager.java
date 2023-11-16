@@ -11,14 +11,18 @@ public class ServerStructureManager {
         }
         return ssm;
     }
-    private boolean isDirCreated(String nomeCartella) {
-        return new File(nomeCartella).mkdir();
+    private void createDir(String nomeCartella) {
+        new File(nomeCartella).mkdir();
+    }
+    private boolean doesDirExist(String nomeCartella) {
+        return new File(nomeCartella).exists();
     }
     public void dirState(String nomeCartella){
-        if (isDirCreated(nomeCartella)){
-            LogManager.getInstance().logPrint("Cartella " + fixName(nomeCartella) + " creata con successo");
-        }else {
-            LogManager.getInstance().logPrint("Cartella " + fixName(nomeCartella) + " non creata o già esistente");
+        if (doesDirExist(nomeCartella)){
+            System.out.println("Cartella " + fixName(nomeCartella) + " non creata o già esistente");
+        } else {
+            createDir(nomeCartella);
+            System.out.println("Cartella " + fixName(nomeCartella) + " creata con successo");
         }
     }
     public void checkServerDataStructure(List<String> listaCartelle){
@@ -27,10 +31,7 @@ public class ServerStructureManager {
         }
     }
     public String fixName(String stringToFix){
-        StringBuilder sb = new StringBuilder(stringToFix);
-        String[] lista = sb.reverse().toString().split("\\\\");
-        sb = new StringBuilder(lista[0].toString());
-        System.out.println(sb);
-        return sb.reverse().toString();
+        String[] lista = stringToFix.split("\\\\");
+        return lista[lista.length-1];
     }
 }
