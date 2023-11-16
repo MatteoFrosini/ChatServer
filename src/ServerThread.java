@@ -7,18 +7,18 @@ import java.net.Socket;
 public class ServerThread extends Thread{
     User user;
     Socket s;
-    LogManager logManager;
-    public ServerThread(Socket s, LogManager logManager){
+    LogManager logger;
+    public ServerThread(Socket s){
         this.s = s;
-        this.logManager = logManager;
+        this.logger = LogManager.getInstance();
     }
     @Override
     public void run(){
         UsersConnection connessione = new UsersConnection(s);
-        logManager.logPrint(this.getName() + " in attesa di nome da Client " + s.getRemoteSocketAddress().toString());
+        logger.logPrint(this.getName() + " in attesa di nome da Client " + s.getRemoteSocketAddress().toString());
         String nome = connessione.getLine();
         user = new User(nome, s, connessione);
-        logManager.logPrint("Creato User " + user.getNome());
-        logManager.logPrint("Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
+        logger.logPrint("Creato User " + user.getNome());
+        logger.logPrint("Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
     }
 }

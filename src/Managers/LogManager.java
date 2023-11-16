@@ -27,14 +27,18 @@ import java.time.format.DateTimeFormatter;
  */
 public class LogManager {
     /**
+     * Variabile statica necessaria per il desing pattern "Singleton"
+     */
+    private static LogManager logManager;
+    /**
      * Oggetto {@link LocalDateTime} necessario per ottenere il tempo.
      */
-    public LocalDateTime time;
+    public static LocalDateTime time;
     /**
      * Oggetto {@link FileWriter} necessario per modificare il Log creato col
      * metodo {@link #buildLog()}.
      */
-    public FileWriter writer;
+    public static FileWriter writer;
     /**
      * Oggetto {@link DateTimeFormatter} necessario per formattare la data.
      */
@@ -42,20 +46,16 @@ public class LogManager {
     /**
      * Costruttore della classe {@link LogManager}
      * */
-    public LogManager() {}
+    private LogManager() {}
     /**
-     * Inizializza il LogManager creando, se non esiste
-     * la cartella "serverLogs".
-     * */
-    public void initLogsFolder (){
-        File logFolder = new File("serverLogs");
-        if (logFolder.mkdirs()) {
-            System.out.println("Cartella serverLogs creata");
-        }else {
-            System.out.println("Cartella serverLogs già esistente o non creata");
+     * Metodo statico necessario per il desing pattern "Singleton"
+     */
+    public static LogManager getInstance(){
+        if(logManager == null) {
+            logManager = new LogManager();
+            buildLog();
         }
-        buildLog();
-        this.logPrint("Creato file di log");
+        return logManager;
     }
     /**
      * Questo metodo stampa la striga inserita preceduta dal tempo attuale all'esecuzione.<br>
@@ -63,7 +63,7 @@ public class LogManager {
      * Il file del Log è creato col metodo {@link #buildLog()}
      * @param string La stringa da stampare
      */
-    public void logPrint(String string) {
+    public synchronized void logPrint(String string) {
         try {
             System.out.println(printTime() + " " + string + "\n");
             writer.write(printTime() + " " + string + "\n");
@@ -90,15 +90,15 @@ public class LogManager {
      * <li>{@code "[date]"} : I log usano il metodo {@link #printTime() printTime()} per assegnarsi la parte secondaria del nome.<br>
      *     Questa parte rappresenta la data di creazione del log ed usa la seguente formattazione* : {@code "dd-MM-yyyy HH-mm-ss"} </li>
      * </ul>
-     * Il log viene creato nella cartella {@code "serverLogs"} precedentemente creata col metodo {@link #initLogsFolder()}<br><br>
+     * Il log viene creato nella cartella {@code "serverLogs"} precedentemente creata dal {@link ServerStructureManager}<br><br>
      * //<a href="https://docs.oracle.com/en/java/">note275</a> <br><b>*</b> : Per colpa delle limitazioni su i nomi dei file di Windows non posso usare i {@code ":"} per rappresentare in modo più bellino la data.
      */
-    public void buildLog(){
+    public static void buildLog(){
         DateTimeFormatter formatNomeLog = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
         time = LocalDateTime.now();
         File log = new File(".\\serverLogs\\ServerLog-" + "[" + time.format(formatNomeLog) + "]" + ".txt");
         try {
-            this.writer = new FileWriter(log, true);
+            writer = new FileWriter(log, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
