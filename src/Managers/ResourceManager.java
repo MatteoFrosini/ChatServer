@@ -20,9 +20,9 @@ public class ResourceManager {
     }
     public void initData (){
         buildLog();
-        buildData();
+        //buildData();
     }
-    private void buildData(){
+    private void buildData(){//metodo per ora inutile
         if (new File(".\\data\\loginInfo\\loginInfo.txt").exists()){
             LogManager.getInstance().logPrint("File loginInfo.txt già esistente o non creato");
         }else {
@@ -48,7 +48,7 @@ public class ResourceManager {
      * <li>{@code "[date]"} : Questa parte rappresenta la data di creazione del log ed usa la seguente formattazione : {@code "dd-MM-yyyy HH-mm-ss"} </li>
      * </ul>
      * Il log viene creato nella cartella {@code "serverLogs"} precedentemente creata dal {@link ServerStructureManager}<br><br>
-     * //<a href="https://docs.oracle.com/en/java/">note275</a> <br><b>*</b> : Per colpa delle limitazioni su i nomi dei file di Windows non posso usare i {@code ":"} per rappresentare in modo più bellino la data.
+     * <b>*</b> : Per colpa delle limitazioni su i nomi dei file di Windows non posso usare i {@code ":"} per rappresentare in modo più bellino la data.
      */
     private static void buildLog(){
         DateTimeFormatter formatNomeLog = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");

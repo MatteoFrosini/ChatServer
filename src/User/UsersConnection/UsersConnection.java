@@ -1,4 +1,4 @@
-package UsersConnection;
+package User.UsersConnection;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

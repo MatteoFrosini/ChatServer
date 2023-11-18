@@ -1,16 +1,23 @@
-import UsersConnection.UsersConnection;
+package ServerThreads;
+
+import ChatHandlers.BrodcastChatHandler;
+import User.UsersConnection.UsersConnection;
 import Managers.LogManager;
 import User.User;
 
 import java.net.Socket;
 
-public class ServerThread extends Thread{
+public class ClientThread extends Thread{
     User user;
     Socket s;
     LogManager logger;
-    public ServerThread(Socket s){
+    public ClientThread(Socket s, int i){
+        super("ClientThread-" + i);
         this.s = s;
         this.logger = LogManager.getInstance();
+    }
+    public User getUser() {
+        return user;
     }
     @Override
     public void run(){
@@ -20,5 +27,10 @@ public class ServerThread extends Thread{
         user = new User(nome, s, connessione);
         logger.logPrint("Creato User " + user.getNome());
         logger.logPrint("Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
+        String messageToSend;
+        do {
+            messageToSend = user.getConnesione().getLine();
+            BrodcastChatHandler.getInstance().sendMessageToBrodcast(messageToSend);
+        } while (true);
     }
 }
