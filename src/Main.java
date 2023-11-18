@@ -23,12 +23,12 @@ public class Main {
             int numeroClientThread = 0;
             while(true){
                 Socket s = server.accept();
-                logger.logPrint("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
+                logger.logPrintAsServer("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
                 ClientThread thread = new ClientThread(s,numeroClientThread);
-                logger.logPrint("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
+                logger.logPrintAsServer("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
                 numeroClientThread++;
                 thread.start();
-                logger.logPrint(thread.getName() + " avviato");
+                logger.logPrintAsClient(thread,thread.getName() + " avviato");
             }
         } catch (Exception e) {
             e.printStackTrace();

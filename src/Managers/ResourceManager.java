@@ -24,7 +24,7 @@ public class ResourceManager {
     }
     private void buildData(){//metodo per ora inutile
         if (new File(".\\data\\loginInfo\\loginInfo.txt").exists()){
-            LogManager.getInstance().logPrint("File loginInfo.txt già esistente o non creato");
+            LogManager.getInstance().logPrintAsServer("File loginInfo.txt già esistente o non creato");
         }else {
             try {
                 File loginInfo = new File(".\\data\\loginInfo\\loginInfo.txt");
@@ -35,7 +35,7 @@ public class ResourceManager {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            LogManager.getInstance().logPrint("Creato file loginInfo.txt");
+            LogManager.getInstance().logPrintAsServer("Creato file loginInfo.txt");
         }
     }
     /**
@@ -59,6 +59,6 @@ public class ResourceManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LogManager.getInstance().logPrint("Log creato");
+        LogManager.getInstance().logPrintAsServer("Log creato");
     }
 }

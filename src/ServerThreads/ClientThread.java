@@ -22,11 +22,11 @@ public class ClientThread extends Thread{
     @Override
     public void run(){
         UsersConnection connessione = new UsersConnection(s);
-        logger.logPrint(this.getName() + " in attesa di nome da Client " + s.getRemoteSocketAddress().toString());
+        logger.logPrintAsClient(this,this.getName() + " in attesa di nome da Client " + s.getRemoteSocketAddress().toString());
         String nome = connessione.getLine();
         user = new User(nome, s, connessione);
-        logger.logPrint("Creato User " + user.getNome());
-        logger.logPrint("Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
+        logger.logPrintAsClient(this,"Creato User " + user.getNome());
+        logger.logPrintAsClient(this,"Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
         String messageToSend;
         do {
             messageToSend = user.getConnesione().getLine();

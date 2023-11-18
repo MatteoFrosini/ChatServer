@@ -1,12 +1,14 @@
 package Managers;
 
+import ServerThreads.ClientThread;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * La classe LogManager ci permette di creare un log per tutte le attività del server.<br>
- * Usando il metodo {@link #logPrint(String)} siamo capaci di scrivere sul file di log.<br>
+ * Usando il metodo {@link } siamo capaci di scrivere sul file di log.<br>
  * Tutti i log verranno salvati in una cartella nominata {@code "serverLogs"}.<br>
  * Tutti i log utilizzano il format di denominazione descritto nel metodo {@code buildLog} della classe {@link ResourceManager}.<br>
  * Questa classe è dotata di 1 attributo.
@@ -45,10 +47,25 @@ public class LogManager {
      * Il file del Log è creato dal {@link ResourceManager}.
      * @param string La stringa da stampare
      */
-    public synchronized void logPrint(String string) {
+    public synchronized void logPrintAsServer(String string) {
         try {
-            System.out.println(printTime() + " " + string);
-            ResourceManager.getInstance().getWriter().write(printTime() + " " + string + "\n");
+            System.out.println(printTime() + "[SERVER]" + " " + string);
+            ResourceManager.getInstance().getWriter().write(printTime() + "[SERVER]" + " " + string + "\n");
+            ResourceManager.getInstance().getWriter().flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * Questo metodo stampa la striga inserita preceduta dal tempo attuale all'esecuzione.<br>
+     * La stringa viene stamapata sia sul file del log sia sulla console del server.<br>
+     * Il file del Log è creato dal {@link ResourceManager}.
+     * @param string La stringa da stampare
+     */
+    public synchronized void logPrintAsClient(ClientThread clientThread, String string) {
+        try {
+            System.out.println(printTime() + clientThread.getName() + " " + string);
+            ResourceManager.getInstance().getWriter().write(printTime() + "[" + clientThread.getName() + "]" + string + "\n");
             ResourceManager.getInstance().getWriter().flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

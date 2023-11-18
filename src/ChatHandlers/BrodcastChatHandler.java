@@ -16,15 +16,15 @@ public class BrodcastChatHandler{
         }return BrodcastChatHandler;
     }
     public void sendMessageToBrodcast(String messaggio){
-        logger.logPrint("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
+        logger.logPrintAsServer("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
         for (Thread t : threads) {
             if (t instanceof ClientThread toSend){//da cambiare in caso non vengano aggiunti al programma altri Thread
                 if (!(toSend.getUser() == null)){
                     toSend.getUser().getConnesione().send(messaggio);
-                    logger.logPrint("Il messaggio è stato mandato a " + t.getName());
+                    logger.logPrintAsClient(toSend,"Il messaggio è stato mandato a " + t.getName());
                 }
-                logger.logPrint("Messaggio non inviato a " + t.getName() + " perchè non ha ancora completato il login");
+                logger.logPrintAsClient(toSend,"Messaggio non inviato a " + t.getName() + " perchè non ha ancora completato il login");
             }
         }
     }

@@ -1,4 +1,4 @@
-package Enums;
+package FrequentVariables;
 public enum protocolCodes {
     /**
      * <p>Invia un messaggio con il nome al server</p>
