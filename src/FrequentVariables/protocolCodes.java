@@ -40,7 +40,7 @@ public enum protocolCodes {
     protocolCodes (String cmd){
         this.cmd =  cmd;
     }
-    public String toString(){
+    public String getCmd(){
         return cmd;
     }
 }

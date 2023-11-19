@@ -1,6 +1,6 @@
 package ServerThreads;
 
-import ChatHandlers.BrodcastChatHandler;
+import Managers.ChatHandlers.BrodcastChatHandler;
 import User.UsersConnection.UsersConnection;
 import Managers.LogManager;
 import User.User;

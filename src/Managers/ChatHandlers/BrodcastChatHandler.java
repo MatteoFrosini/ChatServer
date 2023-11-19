@@ -1,4 +1,4 @@
-package ChatHandlers;
+package Managers.ChatHandlers;
 
 import Managers.LogManager;
 import ServerThreads.ClientThread;
