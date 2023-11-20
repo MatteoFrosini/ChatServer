@@ -1,16 +1,24 @@
 package Managers.PacketsManager;
 
 public class PacketEncoder {
-    public String[] getCommand(String packet){
-        return packet.split(":");
-    }
-    public void encodePacket(String[] cmd, String data){
-        switch (cmd[0]){
-            case "userList" -> {}
-            case "msgRequest" -> {}
-            case "msg" -> {}
-            case "msgRecivedBroadcast" -> {}
-            default -> {}
+    private static PacketEncoder pd;
+    private PacketEncoder() {};
+    public static PacketEncoder getInstance() {
+        if (pd == null){
+            pd = new PacketEncoder();
         }
+        return pd;
+    }
+    public String encodeUserList(String messaggio){
+        return "userList" + messaggio;
+    }
+    public String encodeMsgRequest(String messaggio){
+        return "msgRequest" + messaggio;
+    }
+    public String encodeMsg(String messaggio){
+        return "msg" + messaggio;
+    }
+    public String encodeMsgRecivedBroadcast(String messaggio){
+        return "msgRecivedBroadcast" + messaggio;
     }
 }

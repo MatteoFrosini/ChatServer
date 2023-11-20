@@ -47,25 +47,10 @@ public class LogManager {
      * Il file del Log è creato dal {@link ResourceManager}.
      * @param string La stringa da stampare
      */
-    public synchronized void logPrintAsServer(String string) {
+    public synchronized void logPrint(String string) {
         try {
             System.out.println(printTime() + "[SERVER]" + " " + string);
             ResourceManager.getInstance().getWriter().write(printTime() + "[SERVER]" + " " + string + "\n");
-            ResourceManager.getInstance().getWriter().flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    /**
-     * Questo metodo stampa la striga inserita preceduta dal tempo attuale all'esecuzione.<br>
-     * La stringa viene stamapata sia sul file del log sia sulla console del server.<br>
-     * Il file del Log è creato dal {@link ResourceManager}.
-     * @param string La stringa da stampare
-     */
-    public synchronized void logPrintAsClient(ClientThread clientThread, String string) {
-        try {
-            System.out.println(printTime() + "[" + clientThread.getName() + "] " + string);
-            ResourceManager.getInstance().getWriter().write(printTime() + "[" + clientThread.getName() + "] " + string + "\n");
             ResourceManager.getInstance().getWriter().flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

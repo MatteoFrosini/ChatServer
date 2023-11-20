@@ -1,4 +1,3 @@
-import GUI.ConsoleGui;
 import Managers.LogManager;
 
 import Managers.ResourceManager;
@@ -25,12 +24,12 @@ public class Main {
             int numeroClientThread = 0;
             while(true){
                 Socket s = server.accept();
-                logger.logPrintAsServer("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
+                logger.logPrint("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
                 ClientThread thread = new ClientThread(s,numeroClientThread);
-                logger.logPrintAsServer("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
+                logger.logPrint("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
                 numeroClientThread++;
                 thread.start();
-                logger.logPrintAsClient(thread,thread.getName() + " avviato");
+                logger.logPrint(thread.getName() + " avviato");
             }
         } catch (Exception e) {
             e.printStackTrace();

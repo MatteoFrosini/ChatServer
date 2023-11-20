@@ -1,5 +1,7 @@
 package Managers.PacketsManager;
 
+import Managers.ChatHandlers.BrodcastChatHandler;
+import Managers.ChatHandlers.DirectChatHander;
 import ServerThreads.ClientThread;
 import User.UsersConnection.UsersConnection;
 import Managers.LogManager;
@@ -24,26 +26,29 @@ public class PacketDecoder {
             case "userListRequest" -> {}
             case "switchToBroadcast" -> {onSwitchToBroadcast(clientThread);}
             case "switchToUser" -> {}
-            case "msg" -> {onMessage(clientThread);}
+            case "msg" -> {onMessage(cmd[1],clientThread);}
             default -> {}
         }
     }
     private void onHelloPacket(String nome, ClientThread clientThread) {
         clientThread.setUser(new User(nome, new UsersConnection(clientThread.getSocket())));
-        LogManager.getInstance().logPrintAsClient(clientThread,"Creato User " + clientThread.getUser().getNome());
-        LogManager.getInstance().logPrintAsClient(clientThread,"Client " + clientThread.getSocket().getRemoteSocketAddress().toString() + " assume il nome " + clientThread.getUser().getNome());
+        LogManager.getInstance().logPrint("Creato User " + clientThread.getUser().getNome());
+        LogManager.getInstance().logPrint("Client " + clientThread.getSocket().getRemoteSocketAddress().toString() + " assume il nome " + clientThread.getUser().getNome());
     }
     private void onSwitchToBroadcast(ClientThread clientThread) {
         if (!(clientThread.isOnBrodcast())){
             clientThread.setOnBrodcast(true);
-            LogManager.getInstance().logPrintAsServer("Client " + clientThread.getUser().getNome() + " connesso al canale di Broadcast");
+            LogManager.getInstance().logPrint("Client " + clientThread.getUser().getNome() + " connesso al canale di Broadcast");
         } else {
-            LogManager.getInstance().logPrintAsServer("Client " + clientThread.getUser().getNome() + " già connesso al canale di Broadcast");
+            LogManager.getInstance().logPrint("Client " + clientThread.getUser().getNome() + " già connesso al canale di Broadcast");
         }
     }
-    private void onMessage(ClientThread clientThread) {
+    private void onMessage(String messaggio, ClientThread clientThread) {
         if (clientThread.isOnBrodcast()){
-
+            BrodcastChatHandler.getInstance().sendMessageToBrodcast(messaggio);
+        } else {
+            LogManager.getInstance().logPrint("Ricevuto messaggio per " + clientThread.getUser().getNome());
+            PacketManager.getInstance().sendPacketToUser(messaggio,clientThread.getOnUser(), clientThread);
         }
     }
 }
