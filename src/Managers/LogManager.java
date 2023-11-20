@@ -64,8 +64,8 @@ public class LogManager {
      */
     public synchronized void logPrintAsClient(ClientThread clientThread, String string) {
         try {
-            System.out.println(printTime() + clientThread.getName() + " " + string);
-            ResourceManager.getInstance().getWriter().write(printTime() + "[" + clientThread.getName() + "]" + string + "\n");
+            System.out.println(printTime() + "[" + clientThread.getName() + "] " + string);
+            ResourceManager.getInstance().getWriter().write(printTime() + "[" + clientThread.getName() + "] " + string + "\n");
             ResourceManager.getInstance().getWriter().flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
