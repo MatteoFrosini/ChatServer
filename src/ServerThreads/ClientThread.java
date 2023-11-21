@@ -46,7 +46,6 @@ public class ClientThread extends Thread{
         UsersConnection connessione = new UsersConnection(socket);
         logger.logPrint(this.getName() + " in attesa di nome da Client " + socket.getRemoteSocketAddress().toString());
         do {
-            logger.logPrint("Client " + this.getName() + " a ricevuto un pacchetto");
             packetManager.packetDecode(connessione.getLine(), this);
         } while (true);
         /*user = new User(nome, s, connessione);

@@ -20,21 +20,26 @@ public class PacketDecoder {
         return packet.split(":");
     }
     public void decodePacket(String[] cmd, ClientThread clientThread){
+        LogManager.getInstance().logPrint("Prefisso del comando in arrivo da " + clientThread.getName() + ": " + cmd[0]);
+        LogManager.getInstance().logPrint("Dati del comando in arrivo da " + clientThread.getName() + ": " + cmd[1]);
         switch (cmd[0]){
             case "hello" -> {onHelloPacket(cmd[1],clientThread);}
             case "bye" -> {}
             case "userListRequest" -> {}
-            case "switchToBroadcast" -> {onSwitchToBroadcast(clientThread);}
-            case "switchToUser" -> {}
+            case "switchBroadcast" -> {onSwitchToBroadcast(clientThread);}
+            case "switchToUser" -> {onSwitchToUser(cmd[1],clientThread);}
             case "msg" -> {onMessage(cmd[1],clientThread);}
             default -> {}
         }
     }
+
     private void onHelloPacket(String nome, ClientThread clientThread) {
+        LogManager.getInstance().logPrint("Ricevuto pacchetto con comando hello");
         clientThread.setUser(new User(nome, new UsersConnection(clientThread.getSocket())));
         LogManager.getInstance().logPrint("Creato User " + clientThread.getUser().getNome());
         LogManager.getInstance().logPrint("Client " + clientThread.getSocket().getRemoteSocketAddress().toString() + " assume il nome " + clientThread.getUser().getNome());
     }
+
     private void onSwitchToBroadcast(ClientThread clientThread) {
         if (!(clientThread.isOnBrodcast())){
             clientThread.setOnBrodcast(true);
@@ -42,13 +47,18 @@ public class PacketDecoder {
         } else {
             LogManager.getInstance().logPrint("Client " + clientThread.getUser().getNome() + " già connesso al canale di Broadcast");
         }
+        PacketManager.getInstance().sendConfirmationPacket(clientThread);
+    }
+    private void onSwitchToUser(String user, ClientThread clientThread) {
+        PacketManager.getInstance().sendConfirmationPacket(clientThread);
     }
     private void onMessage(String messaggio, ClientThread clientThread) {
         if (clientThread.isOnBrodcast()){
-            BrodcastChatHandler.getInstance().sendMessageToBrodcast(messaggio);
+            LogManager.getInstance().logPrint("Ricevuto messaggio per il canale di Broadcast");
+            PacketManager.getInstance().sendPacketToBroadcast(messaggio);
         } else {
             LogManager.getInstance().logPrint("Ricevuto messaggio per " + clientThread.getUser().getNome());
-            PacketManager.getInstance().sendPacketToUser(messaggio,clientThread.getOnUser(), clientThread);
+            PacketManager.getInstance().sendPacketToUser(messaggio,clientThread.getOnUser());
         }
     }
 }

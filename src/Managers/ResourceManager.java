@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ResourceManager {
-    public static ResourceManager rm;
+    private static ResourceManager rm;
     private static FileWriter writer;
     private ResourceManager() {
     }

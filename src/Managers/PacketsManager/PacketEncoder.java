@@ -10,15 +10,15 @@ public class PacketEncoder {
         return pd;
     }
     public String encodeUserList(String messaggio){
-        return "userList" + messaggio;
+        return "userList:" + messaggio;
     }
     public String encodeMsgRequest(String messaggio){
-        return "msgRequest" + messaggio;
+        return "msgRequest:" + messaggio;
     }
     public String encodeMsg(String messaggio){
-        return "msg" + messaggio;
+        return "msg:" + messaggio;
     }
     public String encodeMsgRecivedBroadcast(String messaggio){
-        return "msgRecivedBroadcast" + messaggio;
+        return "msgRecivedBroadcast:" + messaggio;
     }
 }

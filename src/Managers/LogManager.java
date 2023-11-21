@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static GUI.ConsoleGui.log;
+
 /**
  * La classe LogManager ci permette di creare un log per tutte le attività del server.<br>
  * Usando il metodo {@link } siamo capaci di scrivere sul file di log.<br>
@@ -49,6 +51,8 @@ public class LogManager {
      */
     public synchronized void logPrint(String string) {
         try {
+            String s = log.getText().toString();
+            log.setText(s += printTime() + "[SERVER]" + " " + string + "\n");
             System.out.println(printTime() + "[SERVER]" + " " + string);
             ResourceManager.getInstance().getWriter().write(printTime() + "[SERVER]" + " " + string + "\n");
             ResourceManager.getInstance().getWriter().flush();

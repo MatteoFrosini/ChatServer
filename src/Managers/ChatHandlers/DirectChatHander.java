@@ -16,7 +16,7 @@ public class DirectChatHander {
         }
         return dch;
     }
-    public void sendMessageToUser(String messaggio, String onUser, ClientThread clientThread){
+    public void sendMessageToUser(String messaggio, String onUser){
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
         for (Thread t : threads) {
             if (t instanceof ClientThread toSend){
