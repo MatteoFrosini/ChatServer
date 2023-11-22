@@ -12,8 +12,7 @@ public class ClientThread extends Thread{
     private Socket socket;
     private LogManager logger;
     private PacketManager packetManager;
-    private boolean onBrodcast = false;
-    private String onUser = null;
+    private String connectedUser = "";
     public ClientThread(Socket s, int i){
         super("ClientThread-" + i);
         this.socket = s;
@@ -29,17 +28,11 @@ public class ClientThread extends Thread{
     public Socket getSocket() {
         return socket;
     }
-    public boolean isOnBrodcast() {
-        return onBrodcast;
+    public String getConnectedUser() {
+        return connectedUser;
     }
-    public String getOnUser() {
-        return onUser;
-    }
-    public void setOnBrodcast(boolean onBrodcast) {
-        this.onBrodcast = onBrodcast;
-    }
-    public void setOnUser(String onUser) {
-        this.onUser = onUser;
+    public void setConnectedUser(String connectedUser) {
+        this.connectedUser = connectedUser;
     }
     @Override
     public void run(){
@@ -48,12 +41,5 @@ public class ClientThread extends Thread{
         do {
             packetManager.packetDecode(connessione.getLine(), this);
         } while (true);
-        /*user = new User(nome, s, connessione);
-        logger.logPrintAsClient(this,"Creato User " + user.getNome());
-        logger.logPrintAsClient(this,"Client " + s.getRemoteSocketAddress().toString() + " assume il nome " + user.getNome());
-        do {
-            messageToSend = user.getConnesione().getLine();
-            BrodcastChatHandler.getInstance().sendMessageToBrodcast(messageToSend);
-        } while (true);*/
     }
 }

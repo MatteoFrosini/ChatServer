@@ -31,7 +31,7 @@ public class PacketManager {
         packetDecoder.decodePacket(packetDecoder.getCommand(packet), clientThread);
     }
     public void sendConfirmationPacket(ClientThread clientThread){
-        LogManager.getInstance().logPrint("Invio la conferma dello switch della chat a " + clientThread.getName());
         clientThread.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRequest("1"));
+        LogManager.getInstance().logPrint("Invio la conferma dello switch della chat a " + clientThread.getName());
     }
 }

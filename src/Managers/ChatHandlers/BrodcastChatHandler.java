@@ -2,6 +2,7 @@ package Managers.ChatHandlers;
 
 import Managers.LogManager;
 import Managers.PacketsManager.PacketEncoder;
+import Managers.UserManager;
 import ServerThreads.ClientThread;
 import java.util.Set;
 
@@ -18,16 +19,9 @@ public class BrodcastChatHandler{
     }
     public void sendMessageToBrodcast(String messaggio){
         logger.logPrint("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
-        for (Thread t : threads) {
-            if (t instanceof ClientThread toSend){//da cambiare in caso non vengano aggiunti al programma altri Thread
-                if (!(toSend.getUser() == null)){
-                    toSend.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRecivedBroadcast(messaggio));
-                    logger.logPrint("Il messaggio è stato mandato a " + t.getName());
-                }else {
-                    logger.logPrint("Messaggio non inviato a " + t.getName() + " perchè non ha ancora completato il login");
-                }
-            }
+        for (ClientThread t : UserManager.getInstance().getBroadcast()) {
+            t.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRecivedBroadcast(messaggio));
+            logger.logPrint("Il messaggio è stato mandato a " + t.getName());
         }
     }
 }
