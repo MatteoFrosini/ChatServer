@@ -4,6 +4,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 target/
+resources/
 
 ### Eclipse ###
 .apt_generated
@@ -30,6 +31,6 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### Log server ###
+### Server ###
 serverLogs/
 data/
