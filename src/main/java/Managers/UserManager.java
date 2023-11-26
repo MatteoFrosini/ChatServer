@@ -22,9 +22,27 @@ public class UserManager {
     public ArrayList<ClientThread> getBroadcast(){
         return listaThreadConnessi;
     }
-    public void getSpecificClient(){
+    public boolean doesClientExist(String user){
         for (ClientThread t : listaThreadConnessi){
-
+            if (t.getUser().getNome().equals(user)) {
+                return true;
+            }
+        }return false;
+    }
+    public ClientThread getSpecificClient(String user){
+        for (ClientThread t : listaThreadConnessi){
+            if (t.getUser().getNome().equals(user)) {
+                return t;
+            }
         }
+        return null;
+    }
+    public String getClientListAsString(){
+        StringBuilder clientListAsString = new StringBuilder();
+        for (ClientThread t : listaThreadConnessi){
+            clientListAsString.append(t.getUser().getNome()).append(";");
+        }
+        clientListAsString.deleteCharAt(clientListAsString.lastIndexOf(";"));
+        return clientListAsString.toString();
     }
 }
