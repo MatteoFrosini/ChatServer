@@ -1,5 +1,6 @@
 package Managers;
 
+import GUI.ConsoleGUI;
 import ServerThreads.ClientThread;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class UserManager {
 
     public void newThreadJoin(ClientThread clientThread){
         listaThreadConnessi.add(clientThread);
+        ConsoleGUI.addUserToLogGUI(clientThread);
         LogManager.getInstance().logPrint("Aggiunto " + clientThread.getName() + " a lista user");
     }
     public ArrayList<ClientThread> getBroadcast(){
