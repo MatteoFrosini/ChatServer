@@ -16,7 +16,7 @@ public class ConsoleGUI extends JFrame {
         scrollPane.setSize(200,200);
         fillArea(50);
         scrollPane.createVerticalScrollBar();
-        scrollPane.setViewport(new JViewport().setView(textArea));
+        //scrollPane.setViewport(new JViewport().setVie(textArea));
         label.setLocation(100,100);
         label.setSize(100,100);
         p.add(scrollPane);

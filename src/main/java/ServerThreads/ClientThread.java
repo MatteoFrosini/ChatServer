@@ -13,6 +13,7 @@ public class ClientThread extends Thread{
     private LogManager logger;
     private PacketManager packetManager;
     private String connectedUser = "";
+    boolean isRunning = true;
     public ClientThread(Socket s, int i){
         super("ClientThread-" + i);
         this.socket = s;
@@ -34,12 +35,18 @@ public class ClientThread extends Thread{
     public void setConnectedUser(String connectedUser) {
         this.connectedUser = connectedUser;
     }
+    public boolean isRunning() {
+        return isRunning;
+    }
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
     @Override
     public void run(){
         UsersConnection connessione = new UsersConnection(socket);
         logger.logPrint(this.getName() + " in attesa di nome da Client " + socket.getRemoteSocketAddress().toString());
         do {
             packetManager.packetDecode(connessione.getLine(), this);
-        } while (true);
+        } while (isRunning());
     }
 }

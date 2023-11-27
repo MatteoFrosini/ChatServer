@@ -17,9 +17,12 @@ public class BrodcastChatHandler{
             BrodcastChatHandler = new BrodcastChatHandler();
         }return BrodcastChatHandler;
     }
-    public void sendMessageToBrodcast(String messaggio){
+    public void sendMessageToBrodcast(String messaggio, ClientThread clientThread){
         logger.logPrint("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
-        for (ClientThread t : UserManager.getInstance().getBroadcast()) {
+        for (ClientThread t : UserManager.getInstance().getBroadcast()){
+            if (t.getName().equals(clientThread.getName())){
+                continue;
+            }
             t.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRecivedBroadcast(messaggio));
             logger.logPrint("Il messaggio è stato mandato a " + t.getName());
         }

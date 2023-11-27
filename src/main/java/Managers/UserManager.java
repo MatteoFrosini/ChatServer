@@ -16,8 +16,15 @@ public class UserManager {
         }
         return userManager;
     }
+
+    public static void removeFromList(ClientThread clientThread) {
+        listaThreadConnessi.remove(clientThread);
+        LogManager.getInstance().logPrint("Rimosso " + clientThread.getName() + " dalla lista user");
+    }
+
     public void newThreadJoin(ClientThread clientThread){
         listaThreadConnessi.add(clientThread);
+        LogManager.getInstance().logPrint("Aggiunto " + clientThread.getName() + " a lista user");
     }
     public ArrayList<ClientThread> getBroadcast(){
         return listaThreadConnessi;
@@ -39,6 +46,7 @@ public class UserManager {
     }
     public String getClientListAsString(){
         StringBuilder clientListAsString = new StringBuilder();
+        clientListAsString.append(listaThreadConnessi.size() +";");
         for (ClientThread t : listaThreadConnessi){
             clientListAsString.append(t.getUser().getNome()).append(";");
         }

@@ -1,4 +1,3 @@
-import GUI.ConsoleGUI;
 import Managers.LogManager;
 
 import Managers.ResourceManager;
