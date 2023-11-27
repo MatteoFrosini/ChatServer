@@ -1,5 +1,7 @@
 package Managers;
 
+import GUI.ConsoleGUI;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +51,7 @@ public class LogManager {
      */
     public synchronized void logPrint(String string) {
         try {
-            System.out.println(printTime() + "[SERVER]" + " " + string);
+            ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + string);
             ResourceManager.getInstance().getWriter().write(printTime() + "[SERVER]" + " " + string + "\n");
             ResourceManager.getInstance().getWriter().flush();
         } catch (IOException e) {

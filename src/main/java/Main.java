@@ -1,3 +1,4 @@
+import GUI.ConsoleGUI;
 import Managers.LogManager;
 
 import Managers.ResourceManager;
@@ -17,7 +18,7 @@ public class Main{
         //Controllo e creazione della struttura del server con i log
         ssm.checkServerDataStructure(new ArrayList<>(Arrays.asList("data","serverLogs",".\\data\\loginInfo",".\\data\\chatData")));
         resourceManager.initData();
-        //ConsoleGUI cng = new ConsoleGUI("Console");
+        ConsoleGUI cng = new ConsoleGUI("Console");
         try {
             ServerSocket server = new ServerSocket(2750);
             int numeroClientThread = 0;

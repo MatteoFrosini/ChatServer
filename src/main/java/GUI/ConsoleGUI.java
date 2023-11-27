@@ -4,35 +4,27 @@ import java.awt.*;
 
 public class ConsoleGUI extends JFrame {
     JPanel p = new JPanel(null);
-    JTextArea textArea = new JTextArea();
-    JScrollPane scrollPane = new JScrollPane();
-    JLabel label = new JLabel("mi ammazzo");
+    static JTextArea textArea = new JTextArea();
+    JLabel label = new JLabel("Console:");
     public ConsoleGUI(String title) {
         super(title);
         textArea.setEditable(false);
-        textArea.setLocation(0,0);
-        textArea.setSize(200,200);
-        scrollPane.setLocation(new Point(200,200));
-        scrollPane.setSize(200,200);
-        fillArea(50);
-        scrollPane.createVerticalScrollBar();
-        //scrollPane.setViewport(new JViewport().setVie(textArea));
-        label.setLocation(100,100);
+        JScrollPane scrollPane = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setLocation(new Point(25,265));
+        scrollPane.setSize(1200,245);
+        label.setLocation(25,200);
         label.setSize(100,100);
         p.add(scrollPane);
         p.add(label);
         setContentPane(p);
-        setSize(1500,750);
+        setSize(1250,550);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
-    private void fillArea(int i) {
-        for (int j = 0; j < i; j++) {
-            textArea.setText(textArea.getText()+j+"\n");
-            textArea.updateUI();
-        }
+    public static synchronized void logGUI(String log) {
+        textArea.append(log);
+        textArea.updateUI();
     }
 }

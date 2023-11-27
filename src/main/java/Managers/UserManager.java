@@ -19,7 +19,7 @@ public class UserManager {
 
     public static void removeFromList(ClientThread clientThread) {
         listaThreadConnessi.remove(clientThread);
-        LogManager.getInstance().logPrint("Rimosso " + clientThread.getName() + " dalla lista user");
+        LogManager.getInstance().logPrint("Rimosso " + clientThread.getName() + "(" + clientThread.getUser().getNome() + ")" + " dalla lista user");
     }
 
     public void newThreadJoin(ClientThread clientThread){
