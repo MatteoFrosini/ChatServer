@@ -1,5 +1,6 @@
 package Managers.PacketsManager;
 
+import GUI.ConsoleGUI;
 import Managers.ChatHandlers.BrodcastChatHandler;
 import Managers.ChatHandlers.DirectChatHander;
 import Managers.UserManager;
@@ -45,7 +46,7 @@ public class PacketDecoder {
     }
 
     private void onBye(ClientThread clientThread){
-        LogManager.getInstance().logPrint("Inizio la disconnessione " + clientThread.getUser().getNome() + " su richiesta di quest'ultimo");
+        LogManager.getInstance().logPrint("Inizio la disconnessione di " + clientThread.getUser().getNome() + " su richiesta di quest'ultimo");
         clientThread.setRunning(false);
         try {
             clientThread.getSocket().close();
@@ -68,6 +69,7 @@ public class PacketDecoder {
             LogManager.getInstance().logPrint("Client " + clientThread.getUser().getNome() + " già connesso al canale di Broadcast");
         }
         PacketManager.getInstance().sendConfirmationPacket(clientThread);
+        ConsoleGUI.updateThreadConnessiGUI();
     }
     private void onSwitchToUser(String user,ClientThread clientThread) {
         if (UserManager.getInstance().doesClientExist(user)){
@@ -81,6 +83,7 @@ public class PacketDecoder {
         } else {
             LogManager.getInstance().logPrint("User " + user + " non esiste");
         }
+        ConsoleGUI.updateThreadConnessiGUI();
     }
     private void onMessage(String messaggio, ClientThread clientThread) {
         if (clientThread.getConnectedUser().equals("BROADCAST")){

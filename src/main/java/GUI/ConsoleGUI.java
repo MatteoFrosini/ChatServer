@@ -1,7 +1,12 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+
 import GUI.CostumJComponents.*;
+import Managers.UserManager;
 import ServerThreads.ClientThread;
 
 public class ConsoleGUI extends JFrame {
@@ -9,7 +14,7 @@ public class ConsoleGUI extends JFrame {
     static JTextArea consoleTextArea = new JTextArea();
     static JTextArea threadConnessiTextArea = new JTextArea();
     static costumJLabel consoleLabel = new costumJLabel("Console:",p,100,100,25,200);
-    static costumJLabel threadConnessi = new costumJLabel("Lista thread attualmente connessi:",p,200,50,25,-5);
+    static costumJLabel threadConnessiLabel = new costumJLabel("Lista thread attualmente connessi:",p,250,50,25,-5);
     JLabel label = new JLabel("Console:");
     public ConsoleGUI(String title) {
         super(title);
@@ -41,9 +46,9 @@ public class ConsoleGUI extends JFrame {
     public static synchronized void addUserToLogGUI(ClientThread clientThread){
         threadConnessiTextArea.append("Nome Thread: " + clientThread.getName()
                                       + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
-                                      + " - Nome:" + clientThread.getUser().getNome()
+                                      + " - Nome: " + clientThread.getUser().getNome()
                                       + " - ");
-        if (clientThread.getConnectedUser() == null){
+        if (clientThread.getConnectedUser().isEmpty()){
             threadConnessiTextArea.append("Questo client ancora non sta scrivendo a nessuno");
         } else if (clientThread.getConnectedUser().equals("BROADCAST")){
             threadConnessiTextArea.append("Questo client sta scrivendo in broadcast");
@@ -51,5 +56,23 @@ public class ConsoleGUI extends JFrame {
             threadConnessiTextArea.append("Questo client sta scrivendo a " + clientThread.getConnectedUser());
         }
         threadConnessiTextArea.append("\n");
+        threadConnessiTextArea.update(threadConnessiTextArea.getGraphics());
+    }
+    public static synchronized void removeUserFromGUI(ClientThread clientThread){
+        String[] tc = threadConnessiTextArea.getText().split("\n");
+        ArrayList<String> threadConnessi = new ArrayList<>(Arrays.asList(tc));
+        for (Iterator<String> it = threadConnessi.iterator(); it.hasNext(); ) {
+            String userString = it.next();
+            if (userString.contains(clientThread.getName())){
+                it.remove();
+            }
+        }
+        updateThreadConnessiGUI();
+    }
+    public static synchronized void updateThreadConnessiGUI(){
+        threadConnessiTextArea.setText("");
+        for (ClientThread i : UserManager.getInstance().getBroadcast()){
+            addUserToLogGUI(i);
+        }
     }
 }
