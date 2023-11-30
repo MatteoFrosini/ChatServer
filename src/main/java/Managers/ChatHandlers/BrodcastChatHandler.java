@@ -1,10 +1,10 @@
 package Managers.ChatHandlers;
 
+import Constants.Constants;
 import Managers.LogManager;
 import Managers.PacketsManager.PacketEncoder;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
-import java.util.Set;
 
 public class BrodcastChatHandler{
     public static BrodcastChatHandler BrodcastChatHandler;
@@ -23,7 +23,7 @@ public class BrodcastChatHandler{
             if (t.getName().equals(clientThread.getName())){
                 continue;
             }
-            t.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRecivedBroadcast(messaggio));
+            t.getUser().getConnesione().send(PacketEncoder.getInstance().encode(Constants.MSGRECIVEDBROADCAST,messaggio));
             logger.logPrint("Il messaggio è stato mandato a " + t.getName());
         }
     }

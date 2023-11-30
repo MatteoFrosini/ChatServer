@@ -43,20 +43,10 @@ public class LogManager {
         }
         return logManager;
     }
-    /**
-     * Questo metodo stampa la striga inserita preceduta dal tempo attuale all'esecuzione.<br>
-     * La stringa viene stamapata sia sul file del log sia sulla console del server.<br>
-     * Il file del Log è creato dal {@link ResourceManager}.
-     * @param string La stringa da stampare
-     */
+
     public synchronized void logPrint(String string) {
-        try {
-            ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + string);
-            ResourceManager.getInstance().getWriter().write(printTime() + "[SERVER]" + " " + string + "\n");
-            ResourceManager.getInstance().getWriter().flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + string);
+        ResourceManager.getInstance().writeLogToFile(printTime() + "[SERVER]" + " " + string + "\n");
     }
     /**
      * Ritorna una stringa contenente il tempo attuale alla chiamata del metodo.

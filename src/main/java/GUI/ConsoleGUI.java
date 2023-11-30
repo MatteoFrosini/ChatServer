@@ -24,10 +24,12 @@ public class ConsoleGUI extends JFrame {
         JScrollPane consoleScrollPane = new JScrollPane(consoleTextArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         consoleScrollPane.setLocation(new Point(25,265));
         consoleScrollPane.setSize(1200,225);
+        consoleScrollPane.setAutoscrolls(true);
 
         JScrollPane threadConnessiScrollPane = new JScrollPane(threadConnessiTextArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         threadConnessiScrollPane.setLocation(new Point(25,30));
         threadConnessiScrollPane.setSize(1200,195);
+        consoleScrollPane.setAutoscrolls(true);
 
         p.add(threadConnessiScrollPane);
         p.add(consoleScrollPane);

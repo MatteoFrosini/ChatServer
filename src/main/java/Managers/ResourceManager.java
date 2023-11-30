@@ -1,18 +1,16 @@
 package Managers;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class ResourceManager {
     private static ResourceManager rm;
-    private static FileWriter writer;
-    private ResourceManager() {
-    }
-    public static FileWriter getWriter() {
-        return writer;
-    }
+    private static FileWriter logWriter;
+    private static FileWriter loginInfoWriter;
+    private static FileWriter chatWriter;
+    private ResourceManager() {}
     public static synchronized ResourceManager getInstance(){
         if (rm == null){
             rm = new ResourceManager();
@@ -20,9 +18,10 @@ public class ResourceManager {
     }
     public void initData (){
         buildLog();
-        //buildData();
+        buildData();
+        UserManager.getInstance().setClientsLoginInfo(inizializeLoginInfo());
     }
-    private void buildData(){//metodo per ora inutile
+    private void buildData(){
         if (new File(".\\data\\loginInfo\\loginInfo.txt").exists()){
             LogManager.getInstance().logPrint("File loginInfo.txt già esistente o non creato");
         }else {
@@ -47,18 +46,50 @@ public class ResourceManager {
      * </li>
      * <li>{@code "[date]"} : Questa parte rappresenta la data di creazione del log ed usa la seguente formattazione : {@code "dd-MM-yyyy HH-mm-ss"} </li>
      * </ul>
-     * Il log viene creato nella cartella {@code "serverLogs"} precedentemente creata dal {@link ServerStructureManager}<br><br>
-     * <b>*</b> : Per colpa delle limitazioni su i nomi dei file di Windows non posso usare i {@code ":"} per rappresentare in modo più bellino la data.
+     * Il log viene creato nella cartella {@code "serverLogs"} precedentemente creata dal {@link ServerStructureManager}
      */
     private static void buildLog(){
         DateTimeFormatter formatNomeLog = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm-ss");
         LocalDateTime time = LocalDateTime.now();
         File log = new File(".\\serverLogs\\ServerLog-" + "[" + time.format(formatNomeLog) + "]" + ".txt");
         try {
-            writer = new FileWriter(log, true);
+            logWriter = new FileWriter(log, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         LogManager.getInstance().logPrint("Log creato");
+    }
+    public static void writeLogToFile(String toLog){
+        try {
+            logWriter.write(toLog);
+            logWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private static HashMap<String, String> inizializeLoginInfo(){
+        try {
+            Scanner reader = new Scanner(new File(".\\data\\loginInfo\\loginInfo.txt"));
+            loginInfoWriter = new FileWriter(".\\data\\loginInfo\\loginInfo.txt");
+            HashMap<String,String> clientsLoginInfo = new HashMap<>();
+            String [] values;
+            while (reader.hasNext()){
+                values = reader.nextLine().split(";");
+                clientsLoginInfo.put(values[0],values[1]);
+            }
+            return clientsLoginInfo;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addNewClient(String user, String password) {
+        try {
+            loginInfoWriter.write(user+";"+password);
+            loginInfoWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
