@@ -3,22 +3,26 @@ package Managers.ChatHandlers;
 import Constants.Constants;
 import Managers.LogManager;
 import Managers.PacketsManager.PacketEncoder;
+import Managers.ResourceManager;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
 
-public class DirectChatHander {
-    private static DirectChatHander dch;
+public class DirectChatHandler {
+    private static DirectChatHandler dch;
     private LogManager logger = LogManager.getInstance();
-    private DirectChatHander(){};
-    public static synchronized DirectChatHander getInstance(){
+    private DirectChatHandler(){};
+    public static synchronized DirectChatHandler getInstance(){
         if (dch == null){
-            dch = new DirectChatHander();
+            dch = new DirectChatHandler();
         }
         return dch;
     }
     public void sendMessageToUser(Constants tipoDiPacchetto, String messaggio, ClientThread clientThread){
-        UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,clientThread.getUser().getNome() + messaggio));
+        UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,"[" + clientThread.getUser().getNome() + "] " + messaggio));
         logger.logPrint("Il pacchetto è stato inviato con successo");
+        if (tipoDiPacchetto.equals(Constants.MSG)){
+            ResourceManager.getInstance().writeChat(clientThread, UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()),messaggio);
+        }
     }
     public void sendMessageToSelf(Constants tipoDiPacchetto, String messaggio, ClientThread clientThread){
         clientThread.getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,messaggio));

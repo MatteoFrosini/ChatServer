@@ -2,6 +2,7 @@ package Constants;
 public enum Constants {
     HELLO ("hello"),
     CHATREQUEST ("chatRequest"),
+    CHATDATA ("chatData"),
     BYE ("bye"),
     USERLISTREQUEST ("userListRequest"),
     USERLIST ("userList"),

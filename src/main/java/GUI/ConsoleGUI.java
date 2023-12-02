@@ -1,6 +1,9 @@
 package GUI;
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -22,14 +25,16 @@ public class ConsoleGUI extends JFrame {
         threadConnessiTextArea.setEditable(false);
 
         JScrollPane consoleScrollPane = new JScrollPane(consoleTextArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        DefaultCaret caret = (DefaultCaret)consoleTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         consoleScrollPane.setLocation(new Point(25,265));
         consoleScrollPane.setSize(1200,225);
-        consoleScrollPane.setAutoscrolls(true);
 
         JScrollPane threadConnessiScrollPane = new JScrollPane(threadConnessiTextArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        caret = (DefaultCaret)threadConnessiTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         threadConnessiScrollPane.setLocation(new Point(25,30));
         threadConnessiScrollPane.setSize(1200,195);
-        consoleScrollPane.setAutoscrolls(true);
 
         p.add(threadConnessiScrollPane);
         p.add(consoleScrollPane);
@@ -50,7 +55,7 @@ public class ConsoleGUI extends JFrame {
                                       + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
                                       + " - Nome: " + clientThread.getUser().getNome()
                                       + " - ");
-        if (clientThread.getConnectedUser().isEmpty()){
+        if (clientThread.getConnectedUser() == null){
             threadConnessiTextArea.append("Questo client ancora non sta scrivendo a nessuno");
         } else if (clientThread.getConnectedUser().equals("BROADCAST")){
             threadConnessiTextArea.append("Questo client sta scrivendo in broadcast");

@@ -16,7 +16,7 @@ public class Main{
         ResourceManager resourceManager = ResourceManager.getInstance();
         ServerStructureManager ssm = ServerStructureManager.getInstance();
         //Controllo e creazione della struttura del server con i log
-        ssm.checkServerDataStructure(new ArrayList<>(Arrays.asList("data","serverLogs",".\\data\\loginInfo",".\\data\\chatData")));
+        ssm.checkServerDataStructure(new ArrayList<>(Arrays.asList("data","serverLogs")));
         resourceManager.initData();
         ConsoleGUI cng = new ConsoleGUI("Console");
         try {
