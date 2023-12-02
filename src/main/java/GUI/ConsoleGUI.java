@@ -1,84 +1,94 @@
 package GUI;
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import GUI.CostumJComponents.*;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
 
 public class ConsoleGUI extends JFrame {
-    static JPanel p = new JPanel(null);
     static JTextArea consoleTextArea = new JTextArea();
     static JTextArea threadConnessiTextArea = new JTextArea();
-    static costumJLabel consoleLabel = new costumJLabel("Console:",p,100,100,25,200);
-    static costumJLabel threadConnessiLabel = new costumJLabel("Lista thread attualmente connessi:",p,250,50,25,-5);
-    JLabel label = new JLabel("Console:");
+    static JLabel consoleLabel = new JLabel("Console:");
+    static JLabel threadConnessiLabel = new JLabel("Lista thread attualmente connessi:");
+
     public ConsoleGUI(String title) {
         super(title);
+        setLayout(new GridLayout(2, 1,5,5));
+
+        // CONSOLE
+        JPanel JP_console = new JPanel(new BorderLayout(5, 5));
+        JP_console.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        DefaultCaret caret_consoleTextArea = (DefaultCaret) consoleTextArea.getCaret();
+        caret_consoleTextArea.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         consoleTextArea.setEditable(false);
+        consoleTextArea.setAutoscrolls(true);
+        JP_console.add(consoleLabel, BorderLayout.PAGE_START);
+        JP_console.add(new JScrollPane(consoleTextArea), BorderLayout.CENTER);
+        // CONSOLE END
+
+        // THREAD CONNESSI
+        JPanel JP_threadConnessi = new JPanel(new BorderLayout(5, 5));
+        JP_threadConnessi.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        DefaultCaret caret_threadConnessiTextArea = (DefaultCaret) threadConnessiTextArea.getCaret();
+        caret_threadConnessiTextArea.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         threadConnessiTextArea.setEditable(false);
+        threadConnessiTextArea.setAutoscrolls(true);
+        JP_threadConnessi.add(threadConnessiLabel, BorderLayout.PAGE_START);
+        JP_threadConnessi.add(new JScrollPane(threadConnessiTextArea), BorderLayout.CENTER);
+        // THREAD CONNESSI END
 
-        JScrollPane consoleScrollPane = new JScrollPane(consoleTextArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        DefaultCaret caret = (DefaultCaret)consoleTextArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        consoleScrollPane.setLocation(new Point(25,265));
-        consoleScrollPane.setSize(1200,225);
+        add(JP_threadConnessi);
+        add(JP_console);
 
-        JScrollPane threadConnessiScrollPane = new JScrollPane(threadConnessiTextArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        caret = (DefaultCaret)threadConnessiTextArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        threadConnessiScrollPane.setLocation(new Point(25,30));
-        threadConnessiScrollPane.setSize(1200,195);
-
-        p.add(threadConnessiScrollPane);
-        p.add(consoleScrollPane);
-
-        setContentPane(p);
-        setSize(1250,550);
-        setResizable(false);
+        setSize(1250, 550);
+        setResizable(true);
+        setMinimumSize(new Dimension(300,300));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
     public static synchronized void logGUI(String log) {
-        consoleTextArea.append(log+"\n");
+        consoleTextArea.setText(consoleTextArea.getText() + log + "\n");
         consoleTextArea.update(consoleTextArea.getGraphics());
     }
-    public static synchronized void addUserToLogGUI(ClientThread clientThread){
-        threadConnessiTextArea.append("Nome Thread: " + clientThread.getName()
-                                      + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
-                                      + " - Nome: " + clientThread.getUser().getNome()
-                                      + " - ");
-        if (clientThread.getConnectedUser() == null){
-            threadConnessiTextArea.append("Questo client ancora non sta scrivendo a nessuno");
-        } else if (clientThread.getConnectedUser().equals("BROADCAST")){
-            threadConnessiTextArea.append("Questo client sta scrivendo in broadcast");
+
+    public static synchronized void addUserToLogGUI(ClientThread clientThread) {
+        threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Nome Thread: " + clientThread.getName()
+                + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
+                + " - Nome: " + clientThread.getUser().getNome()
+                + " - ");
+        if (clientThread.getConnectedUser() == null) {
+            threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Questo client ancora non sta scrivendo a nessuno");
+        } else if (clientThread.getConnectedUser().equals("BROADCAST")) {
+            threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Questo client sta scrivendo in broadcast");
         } else {
-            threadConnessiTextArea.append("Questo client sta scrivendo a " + clientThread.getConnectedUser());
+            threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Questo client sta scrivendo a " + clientThread.getConnectedUser());
         }
-        threadConnessiTextArea.append("\n");
+        threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "\n");
         threadConnessiTextArea.update(threadConnessiTextArea.getGraphics());
     }
-    public static synchronized void removeUserFromGUI(ClientThread clientThread){
+
+    public static synchronized void removeUserFromGUI(ClientThread clientThread) {
         String[] tc = threadConnessiTextArea.getText().split("\n");
         ArrayList<String> threadConnessi = new ArrayList<>(Arrays.asList(tc));
-        for (Iterator<String> it = threadConnessi.iterator(); it.hasNext(); ) {
+        for (Iterator<String> it = threadConnessi.iterator(); it.hasNext();) {
             String userString = it.next();
-            if (userString.contains(clientThread.getName())){
+            if (userString.contains(clientThread.getName())) {
                 it.remove();
             }
         }
         updateThreadConnessiGUI();
     }
-    public static synchronized void updateThreadConnessiGUI(){
+
+    public static synchronized void updateThreadConnessiGUI() {
         threadConnessiTextArea.setText("");
-        for (ClientThread i : UserManager.getInstance().getBroadcast()){
+        for (ClientThread i : UserManager.getInstance().getBroadcast()) {
             addUserToLogGUI(i);
         }
     }

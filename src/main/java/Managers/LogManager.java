@@ -2,7 +2,6 @@ package Managers;
 
 import GUI.ConsoleGUI;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

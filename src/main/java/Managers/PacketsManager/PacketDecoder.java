@@ -43,6 +43,7 @@ public class PacketDecoder {
         LogManager.getInstance().logPrint("Creato User " + clientThread.getUser().getNome());
         LogManager.getInstance().logPrint("Client " + clientThread.getSocket().getRemoteSocketAddress().toString() + " assume il nome " + clientThread.getUser().getNome());
         UserManager.getInstance().newThreadJoin(clientThread);
+        PacketManager.getInstance().sendPacketToUser(Constants.USERLIST, UserManager.getInstance().getClientListAsString(), clientThread);
     }
     private void onBye(ClientThread clientThread){
         if (clientThread.getUser() == null){
@@ -97,7 +98,7 @@ public class PacketDecoder {
     private void onMessage(String messaggio, ClientThread clientThread) {
         if (clientThread.getConnectedUser().equals("BROADCAST")) {
             LogManager.getInstance().logPrint("Ricevuto messaggio per il canale di Broadcast");
-            PacketManager.getInstance().sendPacketToBroadcast(messaggio, clientThread);
+            PacketManager.getInstance().sendPacketToBroadcast(Constants.MSGRECIVEDBROADCAST, messaggio, clientThread);
         } else {
             LogManager.getInstance().logPrint("Ricevuto messaggio per " + clientThread.getUser().getNome());
             PacketManager.getInstance().sendPacketToUser(Constants.MSG, messaggio, clientThread);
