@@ -12,7 +12,7 @@ public class ClientThread extends Thread{
     private Socket socket;
     private LogManager logger;
     private PacketManager packetManager;
-    private String connectedUser = "";
+    private String connectedUser;
     boolean isRunning = true;
     public ClientThread(Socket s, int i){
         super("ClientThread-" + i);

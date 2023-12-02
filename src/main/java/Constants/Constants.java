@@ -1,9 +1,6 @@
 package Constants;
 public enum Constants {
-    CREATEUSER ("createUser"),
-    CREATEUSERSTATUS ("createUserStatus"),
-    LOGININFO ("loginInfo"),
-    LOGININFOSTATUS ("loginInfoStatusOK"),
+    HELLO ("hello"),
     CHATREQUEST ("chatRequest"),
     BYE ("bye"),
     USERLISTREQUEST ("userListRequest"),

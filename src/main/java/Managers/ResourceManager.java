@@ -1,4 +1,5 @@
 package Managers;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,24 +19,6 @@ public class ResourceManager {
     }
     public void initData (){
         buildLog();
-        buildData();
-        UserManager.getInstance().setClientsLoginInfo(inizializeLoginInfo());
-    }
-    private void buildData(){
-        if (new File(".\\data\\loginInfo\\loginInfo.txt").exists()){
-            LogManager.getInstance().logPrint("File loginInfo.txt già esistente o non creato");
-        }else {
-            try {
-                File loginInfo = new File(".\\data\\loginInfo\\loginInfo.txt");
-                loginInfo.createNewFile();
-                //non riesco a capire perchè l'istruzione loginInfo.createNewFile(); sia necessaria visto che non viene
-                //usata nella creazione degli altri file ma se non la metto il programma si rifiuta categoricamente
-                //di creare il file.
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            LogManager.getInstance().logPrint("Creato file loginInfo.txt");
-        }
     }
     /**
      * Questo metodo costruisce il file di log, viene infatti chiamato una volta
@@ -63,31 +46,6 @@ public class ResourceManager {
         try {
             logWriter.write(toLog);
             logWriter.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private static HashMap<String, String> inizializeLoginInfo(){
-        try {
-            Scanner reader = new Scanner(new File(".\\data\\loginInfo\\loginInfo.txt"));
-            loginInfoWriter = new FileWriter(".\\data\\loginInfo\\loginInfo.txt");
-            HashMap<String,String> clientsLoginInfo = new HashMap<>();
-            String [] values;
-            while (reader.hasNext()){
-                values = reader.nextLine().split(";");
-                clientsLoginInfo.put(values[0],values[1]);
-            }
-            return clientsLoginInfo;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void addNewClient(String user, String password) {
-        try {
-            loginInfoWriter.write(user+";"+password);
-            loginInfoWriter.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

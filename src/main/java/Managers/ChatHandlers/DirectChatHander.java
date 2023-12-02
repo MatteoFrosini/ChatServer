@@ -16,8 +16,8 @@ public class DirectChatHander {
         }
         return dch;
     }
-    public void sendMessageToUser(Constants tipoDiPacchetto, String messaggio, String connectedUser){
-        UserManager.getInstance().getSpecificClient(connectedUser).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,messaggio));
+    public void sendMessageToUser(Constants tipoDiPacchetto, String messaggio, ClientThread clientThread){
+        UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,clientThread.getUser().getNome() + messaggio));
         logger.logPrint("Il pacchetto è stato inviato con successo");
     }
     public void sendMessageToSelf(Constants tipoDiPacchetto, String messaggio, ClientThread clientThread){
