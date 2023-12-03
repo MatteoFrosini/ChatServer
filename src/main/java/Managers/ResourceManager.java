@@ -41,6 +41,7 @@ import java.util.Scanner;
  */
 public class ResourceManager {
     private static ResourceManager rm;
+    private static LogManager logManager = LogManager.getInstance();
     private static FileWriter logWriter;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("HH-mm-ss");
     private ResourceManager() {}
@@ -76,14 +77,14 @@ public class ResourceManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LogManager.getInstance().logPrint("Log creato");
+        logManager.logPrint("Log creato");
     }
     /**
      * Questo metodo serve per scrivere la stringa passata in input
      * sul file di log.
      * @param stringToLog la stringa da scrivere sul file di log
      */
-    public static void writeLogToFile(String stringToLog){
+    public void writeLogToFile(String stringToLog){
         try {
             logWriter.write(stringToLog);
             logWriter.flush();
@@ -98,9 +99,10 @@ public class ResourceManager {
      * @param receiver Il thread che riceve il messaggio
      * @param sender Il thread che manda il messaggio
      */
-    public static void writeChat(ClientThread sender, ClientThread receiver, String messaggio) {
+    public void writeChat(ClientThread sender, ClientThread receiver, String messaggio) {
         try {
             FileWriter chatWriter = new FileWriter(getFile(sender, receiver), true);
+            logManager.logPrint("Scrivo [" + messaggio + "] nel file di chat " + getPathName(sender, receiver));
             chatWriter.write(printTime() + "[" + sender.getUser().getNome() + "] " + messaggio + ";\n");
             chatWriter.flush();
         } catch (IOException e) {
@@ -138,17 +140,21 @@ public class ResourceManager {
      * @param sender Il thread che manda il messaggio
      * @return la chat tra {@code sender} e {@code receiver}
      * */
-    public static String getChat(ClientThread sender, ClientThread receiver){
+    public String getChat(ClientThread sender, ClientThread receiver){
         StringBuilder chatData = new StringBuilder();
         int index = 0;
+        logManager.logPrint("Inizio a recuperare la chat");
         try {
             Scanner scanner = new Scanner(getFile(sender, receiver));
             while (scanner.hasNext()){
                 chatData.append(scanner.nextLine());
                 index++;
+                logManager.logPrint("Recuperato messaggio numero " + index + " dalla chat");
             }
+            logManager.logPrint("Chat recuperata: preparo la stringa per l'invio");
             chatData.insert(0,index + ";");
             chatData.deleteCharAt(chatData.lastIndexOf(";"));
+            logManager.logPrint("Preparata ed inviata la stringa");
             return chatData.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -172,9 +178,9 @@ public class ResourceManager {
         if (!(new File(pathName).exists())){
             File chat = new File(pathName);
             try {
-                LogManager.getInstance().logPrint("La chat tra " + sender.getUser().getNome() + " e " + receiver.getUser().getNome() + " non esiste");
+                logManager.logPrint("La chat tra " + sender.getUser().getNome() + " e " + receiver.getUser().getNome() + " non esiste");
                 chat.createNewFile();
-                LogManager.getInstance().logPrint("La chat tra " + sender.getUser().getNome() + " e " + receiver.getUser().getNome() + " è stata creata");
+                logManager.logPrint("La chat tra " + sender.getUser().getNome() + " e " + receiver.getUser().getNome() + " è stata creata");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

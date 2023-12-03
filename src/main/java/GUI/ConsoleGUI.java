@@ -13,13 +13,37 @@ import Constants.Constants;
 import Managers.ChatHandlers.BrodcastChatHandler;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
-
+/**
+ * Questa classe gestisce la chat della gui
+ * Questa classe implementa i seguenti metodi:
+ * <ul>
+ *     <li>
+ *        {@link #ConsoleGUI(String)}
+ *     </li>
+ *     <li>
+ *        {@link #updateThreadConnessiGUI()}
+ *     </li>
+ *     <li>
+ *        {@link #removeUserFromGUI(ClientThread)}
+ *     </li>
+ *     <li>
+ *        {@link #addUserToLogGUI(ClientThread)}
+ *     </li>
+ *     <li>
+ *        {@link #logGUI(String)}
+ *     </li>
+ * </ul>
+ * @author Matteo Frosini */
 public class ConsoleGUI extends JFrame {
-    static JTextArea consoleTextArea = new JTextArea();
-    static JTextArea threadConnessiTextArea = new JTextArea();
-    static JLabel consoleLabel = new JLabel("Console:");
-    static JLabel threadConnessiLabel = new JLabel("Lista thread attualmente connessi:");
-
+    private static UserManager userManager = UserManager.getInstance();
+    private static BrodcastChatHandler brodcastChatHandler = BrodcastChatHandler.getInstance();
+    private static JTextArea consoleTextArea = new JTextArea();
+    private static JTextArea threadConnessiTextArea = new JTextArea();
+    private static JLabel consoleLabel = new JLabel("Console:");
+    private static JLabel threadConnessiLabel = new JLabel("Lista thread attualmente connessi:");
+    /**
+     * Questo metodo costruisce e stampa il frame
+     * */
     public ConsoleGUI(String title) {
         super(title);
         setLayout(new GridLayout(2, 1,5,5));
@@ -59,20 +83,42 @@ public class ConsoleGUI extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
-                    BrodcastChatHandler.getInstance().sendPacketToBrodcast(Constants.BYE,"1");
+                    brodcastChatHandler.sendPacketToBrodcast(Constants.BYE,"1");
                 } catch (Exception ignored) {}
                 e.getWindow().dispose();
                 System.exit(0);
             }
         });
     }
-
+    /**
+     * Questo metodo scrive sulla GUI (creata con {@link #ConsoleGUI(String)})
+     * le informazioni passate come parametro.
+     * @param log la stringa da scrivere nel file di log
+     * */
     public static synchronized void logGUI(String log) {
         consoleTextArea.setText(consoleTextArea.getText() + log + "\n");
         consoleTextArea.update(consoleTextArea.getGraphics());
     }
-    // si usa setText(getText + nuovoTesto) perchè senno non funziona 'auto scroll della gui
+    /**
+     * Questo metodo aggiunge un user nella {@link #threadConnessiTextArea}<br>
+     * Questo metodo aggiunge queste informazioni alla textArea:
+     * <ul>
+     *     <li>
+     *         Nome Thread: Il nome del Thread
+     *     </li>
+     *     <li>
+     *         Indirizzo ip e porta: L'indirizzo ip e la porta dell Thread
+     *     </li>
+     *     <li>
+     *         Nome: Nome dell'user del Thread
+     *     </li>
+     *     <li>
+     *         Connected User: l'user con quale il client sta scrivendo
+     *     </li>
+     * </ul>
+     * */
     public static synchronized void addUserToLogGUI(ClientThread clientThread) {
+        // si usa setText(getText + nuovoTesto) perchè senno non funziona l'auto scroll della gui
         threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Nome Thread: " + clientThread.getName()
                 + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
                 + " - Nome: " + clientThread.getUser().getNome()
@@ -87,8 +133,12 @@ public class ConsoleGUI extends JFrame {
         threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "\n");
         threadConnessiTextArea.update(threadConnessiTextArea.getGraphics());
     }
-    // si usa setText(getText + nuovoTesto) perchè senno non funziona 'auto scroll della gui
+    /**
+     * Questo metodo rimuove un user dalla {@link #threadConnessiTextArea}
+     * @param clientThread Il Thread da rimuovere
+     * */
     public static synchronized void removeUserFromGUI(ClientThread clientThread) {
+        // si usa setText(getText + nuovoTesto) perchè senno non funziona 'auto scroll della gui
         String[] tc = threadConnessiTextArea.getText().split("\n");
         ArrayList<String> threadConnessi = new ArrayList<>(Arrays.asList(tc));
         for (Iterator<String> it = threadConnessi.iterator(); it.hasNext();) {
@@ -99,9 +149,12 @@ public class ConsoleGUI extends JFrame {
         }
         updateThreadConnessiGUI();
     }
+    /**
+     * Questo metodo aggiorna la {@link #threadConnessiTextArea}
+     * */
     public static synchronized void updateThreadConnessiGUI() {
         threadConnessiTextArea.setText("");
-        for (ClientThread i : UserManager.getInstance().listaThreadConnessi) {
+        for (ClientThread i : userManager.listaThreadConnessi) {
             addUserToLogGUI(i);
         }
     }

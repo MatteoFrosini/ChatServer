@@ -24,6 +24,7 @@ public class LogManager {
      * Variabile statica necessaria per il desing pattern "Singleton"
      */
     private static LogManager logManager;
+    private static ResourceManager resourceManager = ResourceManager.getInstance();
     /**
      * Oggetto {@link DateTimeFormatter} necessario per formattare la data.
      */
@@ -49,7 +50,7 @@ public class LogManager {
      * */
     public synchronized void logPrint(String stringToLog) {
         ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + stringToLog);
-        ResourceManager.getInstance().writeLogToFile(printTime() + "[SERVER]" + " " + stringToLog + "\n");
+        resourceManager.writeLogToFile(printTime() + "[SERVER]" + " " + stringToLog + "\n");
     }
     /**
      * Ritorna una stringa contenente il tempo attuale alla chiamata del metodo.

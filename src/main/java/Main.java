@@ -11,9 +11,12 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
+        //Inizializzazione Manager
+        ServerStructureManager serverStructureManager = ServerStructureManager.getInstance();
+        ResourceManager resourceManager = ResourceManager.getInstance();
         //Compie le operazioni necessarie per la creazione dei file del server
-        ServerStructureManager.getInstance().checkServerDataStructure(new ArrayList<>(Arrays.asList("data", "serverLogs")));
-        ResourceManager.getInstance().initData();
+        serverStructureManager.checkServerDataStructure(new ArrayList<>(Arrays.asList("data", "serverLogs")));
+        resourceManager.initData();
         ConsoleGUI consoleGUI = new ConsoleGUI("Console");
         try (ServerSocket server = new ServerSocket(2750)) {
             int numeroClientThread = 0;
