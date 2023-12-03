@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class UserManager {
     private static UserManager userManager;
-    private static ArrayList<ClientThread> listaThreadConnessi;
+    public static ArrayList<ClientThread> listaThreadConnessi;
     private UserManager(){
         listaThreadConnessi = new ArrayList<>();
     }
@@ -29,9 +29,6 @@ public class UserManager {
         listaThreadConnessi.add(clientThread);
         ConsoleGUI.addUserToLogGUI(clientThread);
         LogManager.getInstance().logPrint("Aggiunto " + clientThread.getName() + " a lista user");
-    }
-    public ArrayList<ClientThread> getBroadcast(){
-        return listaThreadConnessi;
     }
     public boolean doesClientExist(String user){
         for (ClientThread t : listaThreadConnessi){

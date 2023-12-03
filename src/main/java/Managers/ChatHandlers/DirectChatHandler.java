@@ -18,8 +18,13 @@ public class DirectChatHandler {
         return dch;
     }
     public void sendMessageToUser(Constants tipoDiPacchetto, String messaggio, ClientThread clientThread){
-        UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,"[" + clientThread.getUser().getNome() + "] " + messaggio));
-        logger.logPrint("Il pacchetto è stato inviato con successo");
+        if (!(UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).equals(clientThread.getUser().getNome()))){
+            UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,"[" + clientThread.getUser().getNome() + "] " + messaggio));
+            logger.logPrint("Il pacchetto è stato inviato con successo");
+        } else {
+            UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()).getUser().getConnesione().send(PacketEncoder.getInstance().encode(tipoDiPacchetto,"[" + clientThread.getUser().getNome() + "] ti ha scritto un messaggio"));
+            logger.logPrint("Il pacchetto è stato inviato con successo");
+        }
         if (tipoDiPacchetto.equals(Constants.MSG)){
             ResourceManager.getInstance().writeChat(clientThread, UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser()),messaggio);
         }

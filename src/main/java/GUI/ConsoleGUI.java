@@ -3,10 +3,14 @@ package GUI;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import Constants.Constants;
+import Managers.ChatHandlers.BrodcastChatHandler;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
 
@@ -51,13 +55,23 @@ public class ConsoleGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    BrodcastChatHandler.getInstance().sendPacketToBrodcast(Constants.BYE,"1");
+                } catch (Exception ignored) {}
+                e.getWindow().dispose();
+                System.exit(0);
+            }
+        });
     }
 
     public static synchronized void logGUI(String log) {
         consoleTextArea.setText(consoleTextArea.getText() + log + "\n");
         consoleTextArea.update(consoleTextArea.getGraphics());
     }
-
+    // si usa setText(getText + nuovoTesto) perchè senno non funziona 'auto scroll della gui
     public static synchronized void addUserToLogGUI(ClientThread clientThread) {
         threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "Nome Thread: " + clientThread.getName()
                 + " - Indirizzo ip e porta: " + clientThread.getSocket().getRemoteSocketAddress().toString()
@@ -73,7 +87,7 @@ public class ConsoleGUI extends JFrame {
         threadConnessiTextArea.setText(threadConnessiTextArea.getText() + "\n");
         threadConnessiTextArea.update(threadConnessiTextArea.getGraphics());
     }
-
+    // si usa setText(getText + nuovoTesto) perchè senno non funziona 'auto scroll della gui
     public static synchronized void removeUserFromGUI(ClientThread clientThread) {
         String[] tc = threadConnessiTextArea.getText().split("\n");
         ArrayList<String> threadConnessi = new ArrayList<>(Arrays.asList(tc));
@@ -85,10 +99,9 @@ public class ConsoleGUI extends JFrame {
         }
         updateThreadConnessiGUI();
     }
-
     public static synchronized void updateThreadConnessiGUI() {
         threadConnessiTextArea.setText("");
-        for (ClientThread i : UserManager.getInstance().getBroadcast()) {
+        for (ClientThread i : UserManager.getInstance().listaThreadConnessi) {
             addUserToLogGUI(i);
         }
     }

@@ -29,7 +29,6 @@ public class PacketDecoder {
         switch (Constants.valueOf(cmd[0].toUpperCase())){
             case HELLO -> onHelloPacket(cmd[1],clientThread);
             case BYE -> onBye(clientThread);
-            //case USERLISTREQUEST -> onUserListRequest(clientThread);
             case SWITCHBROADCAST -> onSwitchToBroadcast(clientThread);
             case SWITCHTOUSER -> onSwitchToUser(cmd[1],clientThread);
             case CHATREQUEST -> onChatRequest(clientThread);
@@ -43,7 +42,7 @@ public class PacketDecoder {
         LogManager.getInstance().logPrint("Creato User " + clientThread.getUser().getNome());
         LogManager.getInstance().logPrint("Client " + clientThread.getSocket().getRemoteSocketAddress().toString() + " assume il nome " + clientThread.getUser().getNome());
         UserManager.getInstance().newThreadJoin(clientThread);
-        PacketManager.getInstance().sendPacketToUser(Constants.USERLIST, UserManager.getInstance().getClientListAsString(), clientThread);
+        PacketManager.getInstance().sendPacketToBroadcast(Constants.USERLIST, UserManager.getInstance().getClientListAsString(), clientThread);
     }
     private void onBye(ClientThread clientThread){
         if (clientThread.getUser() == null){
@@ -55,6 +54,7 @@ public class PacketDecoder {
             UserManager.removeFromList(clientThread);
             LogManager.getInstance().logPrint(clientThread.getUser().getNome() + " è stato disconesso con successo");
         }
+        PacketManager.getInstance().sendPacketToBroadcast(Constants.USERLIST, UserManager.getInstance().getClientListAsString(), clientThread);
     }
     private void disconnect(ClientThread clientThread){
         try {
@@ -63,10 +63,6 @@ public class PacketDecoder {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    private void onUserListRequest(ClientThread clientThread){
-        LogManager.getInstance().logPrint("Ricevuta richiesta della User List da " + clientThread.getUser().getNome());
-        PacketManager.getInstance().sendPacketToUser(Constants.USERLIST, UserManager.getInstance().getClientListAsString(),clientThread);
     }
     private void onSwitchToBroadcast(ClientThread clientThread) {
         if (clientThread.getConnectedUser() == null || (!(clientThread.getConnectedUser().equals("BROADCAST")))){
@@ -96,12 +92,16 @@ public class PacketDecoder {
         PacketManager.getInstance().sendPacketToUser(Constants.CHATDATA, ResourceManager.getInstance().getChat(clientThread,UserManager.getInstance().getSpecificClient(clientThread.getConnectedUser())),clientThread);
     }
     private void onMessage(String messaggio, ClientThread clientThread) {
-        if (clientThread.getConnectedUser().equals("BROADCAST")) {
-            LogManager.getInstance().logPrint("Ricevuto messaggio per il canale di Broadcast");
-            PacketManager.getInstance().sendPacketToBroadcast(Constants.MSGRECIVEDBROADCAST, messaggio, clientThread);
+        if (UserManager.listaThreadConnessi.size() <= 1){
+            PacketManager.getInstance().sendPacketToBroadcast(Constants.MSGRECIVEDBROADCAST, "Sei ancora da solo, aspetta che qualcuno si connetta, negro", clientThread);
         } else {
-            LogManager.getInstance().logPrint("Ricevuto messaggio per " + clientThread.getUser().getNome());
-            PacketManager.getInstance().sendPacketToUser(Constants.MSG, messaggio, clientThread);
+            if (clientThread.getConnectedUser().equals("BROADCAST")) {
+                LogManager.getInstance().logPrint("Ricevuto messaggio per il canale di Broadcast");
+                PacketManager.getInstance().sendPacketToBroadcast(Constants.MSGRECIVEDBROADCAST, messaggio, clientThread);
+            } else {
+                LogManager.getInstance().logPrint("Ricevuto messaggio per " + clientThread.getUser().getNome());
+                PacketManager.getInstance().sendPacketToUser(Constants.MSG, messaggio, clientThread);
+            }
         }
     }
 }

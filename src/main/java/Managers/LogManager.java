@@ -1,24 +1,23 @@
 package Managers;
-
 import GUI.ConsoleGUI;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-
-
 /**
  * La classe LogManager ci permette di creare un log per tutte le attività del server.<br>
  * Usando il metodo {@link } siamo capaci di scrivere sul file di log.<br>
  * Tutti i log verranno salvati in una cartella nominata {@code "serverLogs"}.<br>
  * Tutti i log utilizzano il format di denominazione descritto nel metodo {@code buildLog} della classe {@link ResourceManager}.<br>
- * Questa classe è dotata di 1 attributo.
+ * Questa classe implementa i seguenti metodi:
  * <ul>
- * <li>
- *     {@link #format} - Il {@link DateTimeFormatter}
- * </li>
+ *    <li>
+ *       {@link #logPrint(String)}
+ *    </li>
+ *    <li>
+ *       {@link #printTime()}
+ *    </li>
  * </ul>
- * @author Matteo Frosini (<a href="https://docs.oracle.com/en/java/">matte275.ddns.net</a>)
+ * @author Matteo Frosini
  */
 public class LogManager {
     /**
@@ -42,10 +41,15 @@ public class LogManager {
         }
         return logManager;
     }
-
-    public synchronized void logPrint(String string) {
-        ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + string);
-        ResourceManager.getInstance().writeLogToFile(printTime() + "[SERVER]" + " " + string + "\n");
+    /**
+     * Questo metodo serve per "Loggare" la stringa passata come parametro
+     * sia sulla console che sul file di log. La stringa viene preceduta da
+     * il tempo in cui viene eseguita la scrittura del Log.
+     * @param stringToLog  la stringa da stampare.
+     * */
+    public synchronized void logPrint(String stringToLog) {
+        ConsoleGUI.logGUI(printTime() + "[SERVER]" + " " + stringToLog);
+        ResourceManager.getInstance().writeLogToFile(printTime() + "[SERVER]" + " " + stringToLog + "\n");
     }
     /**
      * Ritorna una stringa contenente il tempo attuale alla chiamata del metodo.
