@@ -1,6 +1,6 @@
 ##### Server: [TPSIT-Chat-Client]([https://github.com/ViligiardiSamuele/TPSIT-Chat-Client])
 
-# Aggiunta l'interfaccia grafica
+# Aggiunta l'interfaccia grafica 
 
 ## Protocollo Utilizzato
 |Codice                 |Direzione       |Contenuto Data     |Azione                                                                          |
