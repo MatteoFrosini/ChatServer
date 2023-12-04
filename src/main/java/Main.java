@@ -9,27 +9,26 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Main{
-    public static void main(String[] args){
-        //Inizializzazione dei Manager del server
-        LogManager logger = LogManager.getInstance();
+public class Main {
+    public static void main(String[] args) {
+        //Inizializzazione Manager
+        ServerStructureManager serverStructureManager = ServerStructureManager.getInstance();
         ResourceManager resourceManager = ResourceManager.getInstance();
-        ServerStructureManager ssm = ServerStructureManager.getInstance();
-        //Controllo e creazione della struttura del server con i log
-        ssm.checkServerDataStructure(new ArrayList<>(Arrays.asList("data","serverLogs",".\\data\\loginInfo",".\\data\\chatData")));
+        //Compie le operazioni necessarie per la creazione dei file del server
+        serverStructureManager.checkServerDataStructure(new ArrayList<>(Arrays.asList("data", "serverLogs")));
         resourceManager.initData();
-        ConsoleGUI cng = new ConsoleGUI("Console");
-        try {
-            ServerSocket server = new ServerSocket(2750);
+        ConsoleGUI consoleGUI = new ConsoleGUI("Console");
+        try (ServerSocket server = new ServerSocket(2750)) {
             int numeroClientThread = 0;
-            while(true){
+            while (true) {
+                //il server aspetta di ricevere una connessione da un client
                 Socket s = server.accept();
-                logger.logPrint("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
-                ClientThread thread = new ClientThread(s,numeroClientThread);
-                logger.logPrint("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
+                LogManager.getInstance().logPrint("Connessione accetta col client " + s.getRemoteSocketAddress().toString());
+                ClientThread thread = new ClientThread(s, numeroClientThread);
+                LogManager.getInstance().logPrint("Spostato client " + s.getRemoteSocketAddress().toString() + " su " + thread.getName());
                 numeroClientThread++;
                 thread.start();
-                logger.logPrint(thread.getName() + " avviato");
+                LogManager.getInstance().logPrint(thread.getName() + " avviato");
             }
         } catch (Exception e) {
             e.printStackTrace();

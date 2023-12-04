@@ -1,30 +1,57 @@
 package Managers.ChatHandlers;
 
+import Constants.Constants;
 import Managers.LogManager;
-import Managers.PacketsManager.PacketEncoder;
 import Managers.UserManager;
 import ServerThreads.ClientThread;
-import java.util.Set;
-
-public class BrodcastChatHandler{
+/**
+ * Questa classe gestisce l'invio dei pacchetti in Broadcast
+ * Questa classe implementa i seguenti metodi:
+ * <ul>
+ *     <li>
+ *        {@link #sendMessageToBrodcast(String, ClientThread)}
+ *     </li>
+ *     <li>
+ *        {@link #sendPacketToBrodcast(Constants, String)}
+ *     </li>
+ * </ul>
+ * @author Matteo Frosini
+ * */
+public class BrodcastChatHandler {
     public static BrodcastChatHandler BrodcastChatHandler;
+    private UserManager userManager = UserManager.getInstance();
     private LogManager logger;
     private BrodcastChatHandler() {
         this.logger = LogManager.getInstance();
     }
-    public static synchronized BrodcastChatHandler getInstance(){
-        if (BrodcastChatHandler == null){
+    public static synchronized BrodcastChatHandler getInstance() {
+        if (BrodcastChatHandler == null) {
             BrodcastChatHandler = new BrodcastChatHandler();
-        }return BrodcastChatHandler;
+        }
+        return BrodcastChatHandler;
     }
-    public void sendMessageToBrodcast(String messaggio, ClientThread clientThread){
+    /**
+     * Questo metodo gestisce l'invio dei messaggi in Broadcast
+     * @param messaggio il messaggio da inviare
+     * @param clientThread il thread che vuole inviare un messaggio in broadcast
+     * */
+    public void sendMessageToBrodcast(String messaggio, ClientThread clientThread) {
         logger.logPrint("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
-        for (ClientThread t : UserManager.getInstance().getBroadcast()){
-            if (t.getName().equals(clientThread.getName())){
-                continue;
-            }
-            t.getUser().getConnesione().send(PacketEncoder.getInstance().encodeMsgRecivedBroadcast(messaggio));
+        for (ClientThread t : userManager.listaThreadConnessi) {
+            t.getUser().getConnesione().send(Constants.MSGRECIVEDBROADCAST + ":" + "[" + clientThread.getUser().getNome() + "] " + messaggio);
             logger.logPrint("Il messaggio è stato mandato a " + t.getName());
+        }
+    }
+    /**
+     * Questo metodo gestisce l'invio dei messaggi in Broadcast
+     * @param tipoDiPacchetto il tipo di paccheto che si vuole inviare un messaggio in broadcast
+     * @param messaggio il messaggio da inviare
+     * */
+    public void sendPacketToBrodcast(Constants tipoDiPacchetto, String messaggio) {
+        logger.logPrint("il Server si prepara per l'invio di un messaggio nel canale di broadcast");
+        for (ClientThread t : userManager.listaThreadConnessi) {
+            t.getUser().getConnesione().send(tipoDiPacchetto + ":" + messaggio);
+            logger.logPrint("Il pacchetto di tipo " + tipoDiPacchetto + " è stato mandato a " + t.getName());
         }
     }
 }
